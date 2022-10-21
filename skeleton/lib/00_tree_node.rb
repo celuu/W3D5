@@ -6,7 +6,10 @@ class PolyTreeNode
     end
     attr_reader :value, :parent, :children
 
-    def parent=(node)
+    
+    
+end
+def parent=(node)
         return @parent=nil if node.nil?
         @parent.children.delete(self) if @parent
         @parent = node
@@ -48,5 +51,3 @@ class PolyTreeNode
         end
         nil
     end
-    
-end
