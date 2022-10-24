@@ -6,7 +6,6 @@ class KnightPathFinder
         @start_pos = pos
         @considered_positions = [@start_pos]
         build_move_tree
-        p @considered_positions.length
     end
 
     def self.valid_moves(pos) #[2,2], our current position
@@ -32,20 +31,37 @@ class KnightPathFinder
     end
 
     def build_move_tree
-        queue = [PolyTreeNode.new(@start_pos)]
+        @root_node = PolyTreeNode.new(@start_pos)
+        queue = [@root_node]
         until queue.empty?
             current = queue.shift
             new_move_positions(current.pos).each do |child_pos|
                 child = PolyTreeNode.new(child_pos)
-                child.parent = current
                 current.add_child(child)
                 queue << child
-                # print child
             end
         end
     end
 
-    attr_reader :start_pos, :considered_positions
+    def find_path(end_pos)
+        end_node = @root_node.bfs(end_pos)
+        trace_path_back(end_node)
+    end
+
+    def trace_path_back(end_node)
+        ans = []
+        current_node = end_node
+        ans << current_node.pos
+        while @root_node != current_node
+            current_node = current_node.parent
+            ans << current_node.pos
+        end
+        ans.reverse
+    end
+
+
+
+    attr_reader :start_pos, :considered_positions, :root_node
 end
 
 k = KnightPathFinder.new([2,2])
